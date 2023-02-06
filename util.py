@@ -94,25 +94,6 @@ def slice_ds(ds , time=None,cpu=None,bwt=None):
 
     return ds.loc[ (slice_t,slice_b,slice_c) ]
 
-##### Filter measures
-# def slice_and_filter_ds_one_wp(ds , cpu, bwt ):
-#     ds = slice_ds( ds , cpu=cpu, bwt=bwt )
-
-#     measures_to_discard=5
-#     ds_new = copy.deepcopy(ds)
-#     # ds_new.drop(ds_new.tail(measures_to_discard).index, inplace = True)
-#     ds_new.drop( index=ds_new.index[:measures_to_discard] , inplace=True )
-    
-#     for kpi in ds:
-#         meas = ds[ kpi ].values
-#         meas_filt = copy.deepcopy(meas)
-
-#         alpha = 0.2
-#         for i in range(1,len(meas)):
-#             meas_filt[i] = alpha*meas[i] + (1-alpha)*meas_filt[i-1]
-#         meas_filt = meas_filt[measures_to_discard:len(meas_filt)]
-#         ds_new[kpi] = meas_filt
-#     return ds_new
 
 def filter_all_ds( ds_in ):
     ds_out = pd.DataFrame()
@@ -158,57 +139,3 @@ def mean_ds( ds_in ):
         ds_out = pd.concat( [ds_out , ds_new] , axis=0 )
 
     return ds_out
-
-## MSE for one working point
-# def mse_one_wp(test_ds , cpu,bwt , model, squared_err=True, normalised=False):
-#     wp = np.array([cpu,bwt]).reshape(1, -1)
-#     pred = model.predict( wp )
-#     pred = np.tile( pred , (test_ds.values.shape[0],1) )
-
-#     mp = mean_squared_error( test_ds.values[:,0] , pred[:,0] , squared=squared_err )
-#     mc = mean_squared_error( test_ds.values[:,1] , pred[:,1] , squared=squared_err )
-#     mm = mean_squared_error( test_ds.values[:,2] , pred[:,2] , squared=squared_err )
-#     m  = (mp+mc+mm)/3
-#     if normalised:
-#         if squared_err: sq = 2
-#         else: sq = 1
-#         mp = mp / mean( test_ds.values[:,0]**sq )
-#         mc = mc / mean( test_ds.values[:,1]**sq )
-#         mm = mm / mean( test_ds.values[:,2]**sq )
-#         m  = (mp+mc+mm)/3
-
-#     return m, mp, mc , mm
-
-# ## MSE on all working points
-# # def mse_all_wps(ds,model, squared_err=True, normalised=False):
-# def mse_all_wps(test,model, squared_err=True, normalised=False):
-#     mse     = []
-#     mse_power = []
-#     mse_cpu = []
-#     mse_mbps = []
-#     for i in range(cpu_bwt_grid.shape[0]):
-#         cpu = cpu_bwt_grid[i,0]
-#         bwt = cpu_bwt_grid[i,1]
-
-#         # test  = ds.loc[(np.arange(21,30) , bwt,cpu)]
-#         test_wp  = test.loc[(np.arange(21,30) , bwt,cpu)]
-
-#         pred = model.predict( cpu_bwt_grid[i,:].reshape(1, -1) )
-#         pred = np.tile( pred , (test.values.shape[0],1) )
-
-#         m, mp, mc , mm = mse_one_wp(test_wp , cpu, bwt , model, squared_err=squared_err, normalised=normalised)
-#         mse_power.append( mp )
-#         mse_cpu.append(   mc )
-#         mse_mbps.append(  mm )
-#         mse.append(       m )
-        
-#     mse_mean       = mean( mse)
-#     mse_mean_power = mean( mse_power)
-#     mse_mean_cpu   = mean( mse_cpu)
-#     mse_mean_mbps  = mean( mse_mbps)
-#     mse_std        = stdev(mse)
-#     mse_std_power  = stdev(mse_power)
-#     mse_std_cpu    = stdev(mse_cpu)
-#     mse_std_mbps   = stdev(mse_mbps)
-
-#     return  mse_mean , mse_std, mse_mean_power, mse_std_power, mse_mean_cpu, mse_std_cpu, mse_mean_mbps, mse_std_mbps
