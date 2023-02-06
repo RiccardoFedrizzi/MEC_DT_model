@@ -15,5 +15,5 @@
 
 | File        | Description   |
 | ------------- | ------------- |
-| ployfit.ipynb | Python notebook to perform polynomial fitting and plot predictions. |
+| ployfit.ipynb | Python notebook to perform polynomial fitting, plot parameters and plot prediction surfaces. |
 
