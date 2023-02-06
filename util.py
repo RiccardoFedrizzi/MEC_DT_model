@@ -1,18 +1,9 @@
-import random
-import copy, pickle
+import copy
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import cm
-
-from statistics import mean, stdev
-from math import sqrt
 
 from scipy.optimize import curve_fit
-
 from sklearn import neighbors
-from sklearn.metrics import mean_squared_error
-
 from sklearn.multioutput import MultiOutputRegressor
 from sklearn.svm import SVR
 
@@ -60,7 +51,7 @@ class MyPolyfit:
         return pred
 
 
-def training( ds, num_samples=None, m='svr', knn_neighbors=5, svr_c=100000, svr_gamma=0.1, svr_epsilon=0.1):
+def training( ds, num_samples=None, m='svr', knn_neighbors=5, svr_c=100, svr_gamma=0.1, svr_epsilon=0.1):
     if num_samples == None:
         train = ds
     else:
@@ -73,8 +64,7 @@ def training( ds, num_samples=None, m='svr', knn_neighbors=5, svr_c=100000, svr_
     if m=='knn':
         model = neighbors.KNeighborsRegressor(n_neighbors = knn_neighbors)
     if m=='svr':
-        # svr = SVR(kernel="rbf", C=svr_c, gamma=svr_gamma, epsilon=svr_epsilon)
-        svr = SVR(kernel="rbf", C=svr_c)#, gamma=svr_gamma, epsilon=svr_epsilon)
+        svr = SVR(kernel="rbf", C=svr_c, gamma=svr_gamma, epsilon=svr_epsilon)
         model = MultiOutputRegressor(svr)
     if m=='poly':
         model = MyPolyfit(m)
